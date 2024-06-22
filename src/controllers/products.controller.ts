@@ -13,9 +13,12 @@ import {
 } from '@nestjs/common';
 
 import { Response, response } from 'express';
+import { ProductService } from 'src/services/product.service';
 
 @Controller('products')
 export class ProductsController {
+  constructor(private productsService: ProductService) {}
+
   /**
    * Analizando choque de RUTAS, lo toma como id dinamico
    *
@@ -36,10 +39,11 @@ export class ProductsController {
   //version 2
   @Get(':productId')
   @HttpCode(HttpStatus.ACCEPTED)
-  getProduct( @Param('productId') productId: string) {
-    return {
-      message: `product: ${productId}`,
-    };
+  getProduct(@Param('productId') productId: string) {
+    // return {
+    //   message: `product: ${productId}`,
+    return this.productsService.findOne(+productId);
+    // };
   }
 
   /**
@@ -56,23 +60,26 @@ export class ProductsController {
     @Query('offset') offset: number = 0,
     @Query('brand') brand: string,
   ) {
-    return `products: limit= ${limit}   .. offset = ${offset} ... brand == ${brand}`;
+    // return `products: limit= ${limit}   .. offset = ${offset} ... brand == ${brand}`;
+    return this.productsService.findAll();
   }
 
   @Post()
   create(@Body('price') payload: any) {
-    return {
-      message: 'accion de crear',
-      payload,
-    };
+    // return {
+    //   message: 'accion de crear',
+    //   payload,
+    // };
+    return this.productsService.create(payload)
   }
 
   @Put(':id')
-  update(@Param('id') id: number, @Body() payload: any) {
-    return {
-      id,
-      payload,
-    };
+  update(@Param('id') id: string, @Body() payload: any) {
+    // return {
+    //   id,
+    //   payload,
+    // };
+    return this.productsService.update(+id,payload)
   }
 
   @Delete(':id')
