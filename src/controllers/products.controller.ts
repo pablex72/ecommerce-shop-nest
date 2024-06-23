@@ -14,6 +14,7 @@ import {
 } from '@nestjs/common';
 
 import { Response, response } from 'express';
+import { CreateProductDto, UpdateProductDto } from 'src/dtos/products.dtos';
 import { ProductService } from 'src/services/product.service';
 
 @Controller('products')
@@ -66,7 +67,7 @@ export class ProductsController {
   }
 
   @Post()
-  create(@Body('price') payload: any) {
+  create(@Body('price') payload: CreateProductDto) {
     // return {
     //   message: 'accion de crear',
     //   payload,
@@ -75,7 +76,7 @@ export class ProductsController {
   }
 
   @Put(':id')
-  update(@Param('id') id: string, @Body() payload: any) {
+  update(@Param('id') id: string, @Body() payload: UpdateProductDto) {
     // return {
     //   id,
     //   payload,
